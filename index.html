@@ -1,0 +1,1007 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1" />
+  <title>ART STYLES · Mobile Query Builder</title>
+  <style>
+    :root{
+      --bg:#0b0f14;
+      --panel:#101722;
+      --panel2:#0f141d;
+      --text:#e9f0ff;
+      --muted:#9fb0cc;
+      --line:#223046;
+      --chip:#172235;
+      --accent:#6ee7ff;
+      --accent2:#b38bff;
+      --good:#5cffb0;
+      --warn:#ffd56e;
+      --bad:#ff6e8a;
+      --radius:18px;
+      --shadow: 0 12px 30px rgba(0,0,0,.35);
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+      background: radial-gradient(1200px 700px at 50% -10%, rgba(110,231,255,.12), transparent 60%),
+                  radial-gradient(900px 520px at 20% 10%, rgba(179,139,255,.10), transparent 55%),
+                  var(--bg);
+      color:var(--text);
+    }
+    .app{
+      max-width: 520px;
+      margin: 0 auto;
+      padding: 12px 10px 92px;
+    }
+    header{
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      backdrop-filter: blur(10px);
+      background: linear-gradient(to bottom, rgba(11,15,20,.88), rgba(11,15,20,.55));
+      border-bottom: 1px solid rgba(34,48,70,.6);
+      padding: 10px 6px 12px;
+      margin: 0 -10px 10px;
+    }
+    .brand{
+      display:flex; align-items:flex-start; justify-content:space-between; gap:10px;
+      padding: 2px 10px 0;
+    }
+    .title{
+      font-weight: 800;
+      letter-spacing:.2px;
+      font-size: 16px;
+      line-height: 1.2;
+    }
+    .subtitle{
+      color:var(--muted);
+      font-size: 12px;
+      margin-top: 3px;
+    }
+    .pill{
+      display:flex; align-items:center; gap:8px;
+      padding: 8px 10px;
+      border:1px solid rgba(34,48,70,.9);
+      border-radius: 999px;
+      background: rgba(16,23,34,.55);
+      box-shadow: var(--shadow);
+      user-select:none;
+      white-space:nowrap;
+      font-size: 12px;
+      color: var(--muted);
+    }
+    .dot{
+      width:10px; height:10px; border-radius:50%;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      box-shadow: 0 0 18px rgba(110,231,255,.35);
+    }
+
+    .grid{
+      display:grid;
+      grid-template-columns: 1fr;
+      gap: 10px;
+    }
+
+    .panel{
+      background: linear-gradient(180deg, rgba(16,23,34,.9), rgba(15,20,29,.85));
+      border:1px solid rgba(34,48,70,.85);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+    }
+    .panel .hd{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      padding: 12px 12px 10px;
+      border-bottom: 1px solid rgba(34,48,70,.7);
+      gap: 10px;
+    }
+    .panel .hd h2{
+      margin:0;
+      font-size: 13px;
+      letter-spacing:.25px;
+      text-transform: uppercase;
+      color: var(--muted);
+      font-weight: 800;
+    }
+    .panel .bd{ padding: 12px; }
+
+    .searchRow{
+      display:flex; gap:8px; align-items:center;
+      padding: 0 12px 12px;
+    }
+    .searchRow input{
+      width:100%;
+      padding: 11px 12px;
+      border-radius: 14px;
+      border:1px solid rgba(34,48,70,.9);
+      outline:none;
+      background: rgba(11,15,20,.45);
+      color: var(--text);
+      font-size: 14px;
+    }
+    .searchRow input::placeholder{ color: rgba(159,176,204,.65); }
+
+    .filters{
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+      padding: 0 12px 12px;
+    }
+    .chip{
+      border:1px solid rgba(34,48,70,.85);
+      background: rgba(23,34,53,.65);
+      color: var(--muted);
+      border-radius: 999px;
+      padding: 7px 10px;
+      font-size: 12px;
+      user-select:none;
+      display:flex; gap:6px; align-items:center;
+    }
+    .chip[aria-pressed="true"]{
+      color: var(--text);
+      border-color: rgba(110,231,255,.55);
+      box-shadow: 0 0 0 3px rgba(110,231,255,.12);
+      background: rgba(110,231,255,.08);
+    }
+
+    .card{
+      display:flex;
+      gap: 10px;
+      padding: 12px;
+      border-top:1px solid rgba(34,48,70,.65);
+      align-items:stretch;
+    }
+    .card:first-child{ border-top:0; }
+    .thumb{
+      width: 76px;
+      min-width: 76px;
+      height: 76px;
+      border-radius: 16px;
+      background: rgba(11,15,20,.55);
+      border: 1px solid rgba(34,48,70,.85);
+      display:grid;
+      place-items:center;
+      overflow:hidden;
+    }
+    .thumb svg{ width: 72px; height: 72px; }
+    .meta{
+      flex:1;
+      min-width: 0;
+    }
+    .name{
+      font-weight: 850;
+      font-size: 14px;
+      margin: 0;
+      line-height: 1.15;
+    }
+    .desc{
+      margin: 6px 0 8px;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.25;
+    }
+    .row{
+      display:flex;
+      gap: 8px;
+      flex-wrap:wrap;
+      align-items:center;
+    }
+    .tag{
+      font-size: 11px;
+      color: rgba(233,240,255,.85);
+      background: rgba(23,34,53,.55);
+      border: 1px solid rgba(34,48,70,.7);
+      padding: 4px 8px;
+      border-radius: 999px;
+    }
+
+    button{
+      border:1px solid rgba(34,48,70,.9);
+      background: rgba(23,34,53,.65);
+      color: var(--text);
+      border-radius: 14px;
+      padding: 10px 12px;
+      font-weight: 800;
+      letter-spacing:.15px;
+      font-size: 13px;
+      cursor:pointer;
+    }
+    button:active{ transform: translateY(1px); }
+    .btnAdd{
+      background: linear-gradient(135deg, rgba(110,231,255,.18), rgba(179,139,255,.14));
+      border-color: rgba(110,231,255,.35);
+    }
+    .btnGhost{
+      background: rgba(11,15,20,.35);
+    }
+    .btnDanger{
+      background: rgba(255,110,138,.10);
+      border-color: rgba(255,110,138,.35);
+    }
+    .btnGood{
+      background: rgba(92,255,176,.10);
+      border-color: rgba(92,255,176,.35);
+    }
+    .small{
+      padding: 8px 10px;
+      border-radius: 12px;
+      font-size: 12px;
+    }
+
+    .queryBox{
+      width:100%;
+      min-height: 140px;
+      resize: vertical;
+      padding: 12px;
+      border-radius: 16px;
+      border:1px solid rgba(34,48,70,.9);
+      background: rgba(11,15,20,.45);
+      color: var(--text);
+      font-size: 13px;
+      line-height: 1.35;
+      outline:none;
+    }
+    .queryBar{
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+      margin-top: 10px;
+    }
+    .list{
+      display:flex;
+      flex-direction:column;
+      gap:8px;
+    }
+    .selectedItem{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      padding: 10px;
+      border-radius: 16px;
+      border: 1px solid rgba(34,48,70,.85);
+      background: rgba(16,23,34,.55);
+    }
+    .selectedItem .mini{
+      width: 36px; height: 36px;
+      border-radius: 12px;
+      border: 1px solid rgba(34,48,70,.8);
+      background: rgba(11,15,20,.5);
+      display:grid; place-items:center;
+      overflow:hidden;
+    }
+    .selectedItem .mini svg{ width: 34px; height: 34px; }
+    .selectedItem .txt{ flex:1; min-width:0; }
+    .selectedItem .txt .t{ font-weight:850; font-size: 13px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+    .selectedItem .txt .s{ color: var(--muted); font-size: 11px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; margin-top: 2px; }
+    .selectedItem .btns{ display:flex; gap:6px; }
+
+    .toast{
+      position: fixed;
+      left: 50%;
+      bottom: 16px;
+      transform: translateX(-50%);
+      background: rgba(16,23,34,.92);
+      border: 1px solid rgba(34,48,70,.9);
+      padding: 10px 12px;
+      border-radius: 999px;
+      color: var(--text);
+      font-weight: 800;
+      font-size: 12px;
+      box-shadow: var(--shadow);
+      opacity: 0;
+      pointer-events:none;
+      transition: opacity .18s ease, transform .18s ease;
+      z-index: 50;
+      max-width: 92vw;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+    }
+    .toast.show{
+      opacity: 1;
+      transform: translateX(-50%) translateY(-2px);
+    }
+
+    .footerSticky{
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 40;
+      background: linear-gradient(to top, rgba(11,15,20,.92), rgba(11,15,20,.55));
+      border-top: 1px solid rgba(34,48,70,.7);
+      backdrop-filter: blur(10px);
+      padding: 10px 10px 12px;
+    }
+    .footerSticky .inner{
+      max-width: 520px;
+      margin: 0 auto;
+      display:flex;
+      gap: 8px;
+      align-items:center;
+    }
+    .footerSticky button{
+      flex:1;
+      padding: 12px 12px;
+      border-radius: 16px;
+      font-size: 13px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="brand">
+      <div>
+        <div class="title">ART STYLES · Design Component Query Builder</div>
+        <div class="subtitle">Android vertical layout · tap components to build a single prompt/query</div>
+      </div>
+      <div class="pill" title="Local-only, no network">
+        <span class="dot"></span>
+        <span>Offline UI</span>
+      </div>
+    </div>
+  </header>
+
+  <main class="app">
+    <section class="panel" id="queryPanel">
+      <div class="hd">
+        <h2>Current Query</h2>
+        <button class="small btnGhost" id="btnCompact">Toggle compact</button>
+      </div>
+      <div class="bd">
+        <textarea id="queryText" class="queryBox" placeholder="Your composed query appears here…"></textarea>
+        <div class="queryBar">
+          <button class="btnGood" id="btnCopy">Copy</button>
+          <button class="btnGhost" id="btnInsertCommas">Comma-separate</button>
+          <button class="btnGhost" id="btnInsertBullets">Bullet lines</button>
+          <button class="btnDanger" id="btnClear">Clear</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel" style="margin-top:10px;">
+      <div class="hd">
+        <h2>Selected Components</h2>
+        <button class="small btnGhost" id="btnAutoBuild" title="Rebuild textarea from selected components">Rebuild</button>
+      </div>
+      <div class="bd">
+        <div class="list" id="selectedList"></div>
+        <div id="selectedEmpty" class="desc" style="margin:0; padding:2px 2px 0;">
+          No components added yet. Scroll down and tap <b>Add to query</b>.
+        </div>
+      </div>
+    </section>
+
+    <section class="panel" style="margin-top:10px;">
+      <div class="hd">
+        <h2>Component Library</h2>
+        <button class="small btnGhost" id="btnResetFilters">Reset</button>
+      </div>
+
+      <div class="searchRow">
+        <input id="search" type="search" placeholder="Search components (e.g. sri yantra, toroid, lattice)…" />
+      </div>
+
+      <div class="filters" id="filters"></div>
+
+      <div id="cards"></div>
+    </section>
+  </main>
+
+  <div class="footerSticky">
+    <div class="inner">
+      <button class="btnAdd" id="btnAddRandom">Add random (inspire)</button>
+      <button class="btnGhost" id="btnExportJSON">Export JSON</button>
+    </div>
+  </div>
+
+  <div class="toast" id="toast">Copied</div>
+
+  <script>
+    function svgWrap(inner){
+      return `
+        <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <defs>
+            <linearGradient id="g" x1="0" y1="0" x2="100" y2="100">
+              <stop offset="0" stop-color="rgba(110,231,255,.95)"/>
+              <stop offset="1" stop-color="rgba(179,139,255,.95)"/>
+            </linearGradient>
+          </defs>
+          ${inner}
+        </svg>
+      `;
+    }
+
+    const ICONS = {
+      sriYantra: () => svgWrap(`
+        <g stroke="url(#g)" stroke-width="2" opacity="0.95">
+          <circle cx="50" cy="50" r="44"/>
+          <circle cx="50" cy="50" r="34" opacity="0.9"/>
+          <circle cx="50" cy="50" r="24" opacity="0.85"/>
+          <path d="M50 14 L86 78 L14 78 Z"/>
+          <path d="M50 86 L86 22 L14 22 Z" opacity="0.9"/>
+          <path d="M50 20 L78 70 L22 70 Z" opacity="0.85"/>
+          <path d="M50 80 L78 30 L22 30 Z" opacity="0.82"/>
+        </g>
+      `),
+
+      toroid: () => svgWrap(`
+        <g stroke="url(#g)" stroke-width="2">
+          <ellipse cx="50" cy="52" rx="38" ry="22"/>
+          <ellipse cx="50" cy="52" rx="26" ry="14" opacity="0.9"/>
+          <path d="M12 52 C22 30, 78 30, 88 52" opacity="0.85"/>
+          <path d="M12 52 C22 74, 78 74, 88 52" opacity="0.75"/>
+          <path d="M50 16 C62 22, 72 32, 76 52 C72 72, 62 82, 50 88" opacity="0.85"/>
+          <path d="M50 16 C38 22, 28 32, 24 52 C28 72, 38 82, 50 88" opacity="0.65"/>
+        </g>
+      `),
+
+      helix: () => svgWrap(`
+        <g stroke="url(#g)" stroke-width="2" stroke-linecap="round">
+          <path d="M28 18 C60 26, 40 46, 72 54 C44 62, 62 78, 30 86" />
+          <path d="M72 18 C40 26, 60 46, 28 54 C56 62, 38 78, 70 86" opacity="0.85"/>
+          <g opacity="0.9">
+            <line x1="34" y1="27" x2="66" y2="27"/>
+            <line x1="30" y1="44" x2="70" y2="44"/>
+            <line x1="30" y1="60" x2="70" y2="60"/>
+            <line x1="34" y1="77" x2="66" y2="77"/>
+          </g>
+        </g>
+      `),
+
+      spiral: () => svgWrap(`
+        <g stroke="url(#g)" stroke-width="2" stroke-linecap="round">
+          <path d="M50 50
+                   m -2 0
+                   a 2 2 0 1 0 4 0
+                   a 2 2 0 1 0 -4 0" opacity="0.9"/>
+          <path d="M50 50
+                   m -10 0
+                   a 10 10 0 1 1 20 0
+                   a 10 10 0 1 1 -20 0" opacity="0.85"/>
+          <path d="M50 50
+                   m -22 0
+                   a 22 22 0 1 1 44 0
+                   a 22 22 0 1 1 -44 0" opacity="0.75"/>
+          <path d="M50 50
+                   m -36 0
+                   a 36 36 0 1 1 72 0
+                   a 36 36 0 1 1 -72 0" opacity="0.6"/>
+        </g>
+      `),
+
+      lattice: () => svgWrap(`
+        <g stroke="url(#g)" stroke-width="2" opacity="0.95">
+          <path d="M18 30 L50 14 L82 30 L50 46 Z" fill="rgba(110,231,255,.06)"/>
+          <path d="M18 70 L50 54 L82 70 L50 86 Z" fill="rgba(179,139,255,.06)"/>
+          <path d="M18 30 L18 70 L50 86 L82 70 L82 30 L50 14 L18 30"/>
+          <path d="M50 14 L50 54" opacity="0.85"/>
+          <path d="M82 30 L82 70" opacity="0.85"/>
+          <path d="M18 30 L18 70" opacity="0.85"/>
+          <path d="M50 46 L50 86" opacity="0.75"/>
+        </g>
+      `),
+
+      web: () => svgWrap(`
+        <g stroke="url(#g)" stroke-width="2">
+          <circle cx="50" cy="50" r="38" opacity="0.9"/>
+          <circle cx="50" cy="50" r="28" opacity="0.85"/>
+          <circle cx="50" cy="50" r="18" opacity="0.8"/>
+          <circle cx="50" cy="50" r="8"  opacity="0.75"/>
+          <path d="M50 12 L50 88" opacity="0.8"/>
+          <path d="M12 50 L88 50" opacity="0.8"/>
+          <path d="M22 22 L78 78" opacity="0.8"/>
+          <path d="M78 22 L22 78" opacity="0.8"/>
+        </g>
+      `),
+
+      temple: () => svgWrap(`
+        <g stroke="url(#g)" stroke-width="2" stroke-linejoin="round">
+          <path d="M18 78 L82 78" />
+          <path d="M26 78 L26 50 L38 40 L50 50 L62 40 L74 50 L74 78" opacity="0.9"/>
+          <path d="M26 50 L50 26 L74 50" opacity="0.85"/>
+          <path d="M50 26 L50 14" opacity="0.8"/>
+          <path d="M44 78 L44 58 L56 58 L56 78" opacity="0.9"/>
+          <path d="M34 62 L40 62" opacity="0.8"/>
+          <path d="M60 62 L66 62" opacity="0.8"/>
+        </g>
+      `),
+
+      water: () => svgWrap(`
+        <g stroke="url(#g)" stroke-width="2" stroke-linecap="round">
+          <path d="M20 62 C28 52, 40 52, 50 62 C60 72, 72 72, 80 62" />
+          <path d="M20 48 C28 38, 40 38, 50 48 C60 58, 72 58, 80 48" opacity="0.85"/>
+          <path d="M24 74 C34 66, 42 66, 50 74 C58 82, 66 82, 76 74" opacity="0.75"/>
+          <circle cx="32" cy="36" r="3" />
+          <circle cx="68" cy="34" r="3" opacity="0.85"/>
+        </g>
+      `),
+
+      rope: () => svgWrap(`
+        <g stroke="url(#g)" stroke-width="2" stroke-linecap="round">
+          <path d="M18 32 C30 18, 44 18, 50 32 C56 46, 70 46, 82 32" />
+          <path d="M18 68 C30 82, 44 82, 50 68 C56 54, 70 54, 82 68" opacity="0.9"/>
+          <path d="M30 24 L70 76" opacity="0.7"/>
+          <path d="M70 24 L30 76" opacity="0.7"/>
+          <circle cx="50" cy="50" r="10" opacity="0.85"/>
+        </g>
+      `),
+
+      sound: () => svgWrap(`
+        <g stroke="url(#g)" stroke-width="2" stroke-linecap="round">
+          <path d="M20 60 C30 52, 40 52, 50 60 C60 68, 70 68, 80 60" />
+          <path d="M20 48 C30 40, 40 40, 50 48 C60 56, 70 56, 80 48" opacity="0.85"/>
+          <path d="M20 72 C30 64, 40 64, 50 72 C60 80, 70 80, 80 72" opacity="0.75"/>
+          <path d="M50 20 L50 42" opacity="0.9"/>
+          <path d="M44 26 L56 26" opacity="0.9"/>
+        </g>
+      `),
+    };
+
+    const COMPONENTS = [
+      {
+        id: "sri-yantra",
+        name: "Sri Yantra (systems geometry)",
+        tags: ["sacred-geometry","mandala","recursion"],
+        icon: "sriYantra",
+        snippet: "Interlocking triangles + concentric circles + radial symmetry. Great as a base motif / layout scaffold.",
+        prompt: "Sri Yantra-inspired interlocking triangle lattice, concentric rings, exact radial symmetry, clean linework, monochrome + subtle iridescent gradient accents"
+      },
+      {
+        id: "dna-helix",
+        name: "DNA Electrocoil Helix",
+        tags: ["biology","recursion","vortex"],
+        icon: "helix",
+        snippet: "Self-nested double helix with interlocking coils, scale recursion, electrocoil feel.",
+        prompt: "fractally nested DNA double helix, self-interlocking coils, electrocoil geometry, precise symmetrical linework, high-clarity structure"
+      },
+      {
+        id: "triple-spiral",
+        name: "Spiral within a Spiral within a Spiral",
+        tags: ["fractal","golden-ratio","recursion"],
+        icon: "spiral",
+        snippet: "Triple nested logarithmic spiral recursion, golden ratio scaling, hypnotic depth.",
+        prompt: "triple nested logarithmic spirals, spiral-within-spiral recursion, golden ratio scaling, crisp vector geometry, infinite depth illusion"
+      },
+      {
+        id: "toroid-vortex",
+        name: "Self-nested Toroid Vortex",
+        tags: ["physics","toroid","field-lines"],
+        icon: "toroid",
+        snippet: "Field-line torus, nested toroids, coherent flow, vortex / toroidal circulation.",
+        prompt: "self-nested toroid vortex, coherent field lines wrapping a torus, nested toroidal shells, clean scientific illustration style, symmetric"
+      },
+      {
+        id: "crystal-lattice",
+        name: "Crystal Lattice Bonding Geometry",
+        tags: ["crystallography","lattice","chemistry"],
+        icon: "lattice",
+        snippet: "Unit cell scaffolds, lattice nodes, bonding edges; useful for ‘analytical / technical’ vibe.",
+        prompt: "crystal lattice unit cell, precise nodes and bonds, x-ray crystallography aesthetic, Fourier-structure clarity, clean orthographic geometry"
+      },
+      {
+        id: "structured-water",
+        name: "Structured Water Flow Geometry",
+        tags: ["hydrodynamics","flow","biology"],
+        icon: "water",
+        snippet: "Layered waveforms, vortical flow cues, coherent water structuring patterns.",
+        prompt: "structured water geometry patterns, coherent wave layering, hydrodynamic flow lines, minimal scientific diagram, symmetrical composition"
+      },
+      {
+        id: "spiderweb",
+        name: "Spider-Web Radial Tension Grid",
+        tags: ["networks","radial","tension"],
+        icon: "web",
+        snippet: "Radial + concentric tension geometry; great for ‘network / field / grid’ blending.",
+        prompt: "spider-web radial tension grid, concentric rings, precise spokes, high symmetry, minimal linework, architectural diagram style"
+      },
+      {
+        id: "rope-nets",
+        name: "Rope Knot + Net Weave",
+        tags: ["weaving","knotwork","structure"],
+        icon: "rope",
+        snippet: "Macramé knot logic, rope lattice, woven structural membranes.",
+        prompt: "massive rope-net architecture, knotwork joints, woven tensile membrane, clean structural clarity, repeating weave pattern, symmetric"
+      },
+      {
+        id: "fractal-temple",
+        name: "Fractal Temple Architecture",
+        tags: ["architecture","fractal","mandala"],
+        icon: "temple",
+        snippet: "Mandala base + recursive spires + self-similar ornamentation.",
+        prompt: "fractal temple architecture, self-similar recursive spires, mandala base plan, sacred proportions, crisp symmetrical layout"
+      },
+      {
+        id: "angkor-wat",
+        name: "Angkor Wat Layout Motifs",
+        tags: ["architecture","symmetry","historic"],
+        icon: "temple",
+        snippet: "Pyramidal tower clusters + enclosures + axial symmetry; use as ‘temple complex’ blueprint vibe.",
+        prompt: "Angkor Wat-inspired temple complex geometry, axial symmetry, nested enclosures, tower clusters, bas-relief patterning, clean blueprint style"
+      },
+      {
+        id: "agamic-ratios",
+        name: "Agamic Proportional Ratios",
+        tags: ["ratios","architecture","systems"],
+        icon: "lattice",
+        snippet: "Ratios like 1:2, 2:3, 4:5; modular grid; proportion-driven composition control.",
+        prompt: "agamic proportion system, ratio-locked modular grid (1:2, 2:3, 4:5), temple-plan symmetry, measurement marks, diagram clarity"
+      },
+      {
+        id: "vastu-grid",
+        name: "Vastu Mandala Grid System",
+        tags: ["architecture","grid","orientation"],
+        icon: "web",
+        snippet: "Square mandala grid, directional logic, room zoning, nested courtyards.",
+        prompt: "Vastu mandala grid, square modular zoning, cardinal orientation, nested courtyards, architectural plan drawing, crisp lines"
+      },
+      {
+        id: "fengshui-flow",
+        name: "Feng Shui Flow + Pathing Geometry",
+        tags: ["flow","layout","systems"],
+        icon: "water",
+        snippet: "Circulation lines, sightlines, thresholds; “energy flow” translated into path geometry.",
+        prompt: "feng shui flow translated into circulation geometry, soft path curves, threshold nodes, balanced negative space, plan-view diagram"
+      },
+      {
+        id: "heliodynamics",
+        name: "Heliodynamics (Sun Path Geometry)",
+        tags: ["physics","architecture","sun"],
+        icon: "sound",
+        snippet: "Sun arcs, azimuth/elevation curves, shadow-casting logic; good for ‘solar diagram’ overlays.",
+        prompt: "heliodynamic sun-path geometry overlay, azimuth/elevation arcs, shadow vectors, clean technical annotation, symmetrical layout"
+      },
+      {
+        id: "acoustic-chandelier",
+        name: "Chandelier + Acoustic Geometry (Bose-ish)",
+        tags: ["sound","acoustics","architecture"],
+        icon: "sound",
+        snippet: "Radial speaker arrays, wavefront rings, chandelier-like hanging geometry.",
+        prompt: "chandelier acoustic geometry, radial arrays, concentric wavefront rings, clean audio-physics diagram, elegant hanging symmetry"
+      },
+      {
+        id: "plasma-geometry",
+        name: "Plasma Field Filaments",
+        tags: ["plasma","physics","filaments"],
+        icon: "toroid",
+        snippet: "Filamentary arcs, pinches, nested currents; use sparingly as ‘energetic’ structure detail.",
+        prompt: "plasma filament geometry, nested current loops, pinch-like arcs, high-contrast linework, controlled symmetry, scientific illustration"
+      },
+      {
+        id: "pinecone-phyllotaxis",
+        name: "Pinecone / Phyllotaxis Spiral Lattices",
+        tags: ["biology","golden-ratio","lattice"],
+        icon: "spiral",
+        snippet: "Interleaving spiral families, Fibonacci phyllotaxis lattices, seed packing logic.",
+        prompt: "phyllotaxis spiral lattice, Fibonacci seed packing, interleaving spiral families, clean geometric macro pattern, symmetrical framing"
+      },
+      {
+        id: "metanet-hybrid",
+        name: "MetaNet Hybrids (Web + Weave + Lattice)",
+        tags: ["networks","weaving","hybrid"],
+        icon: "web",
+        snippet: "Blend spiderweb tension + rope weave + crystalline nodes into one repeatable primitive.",
+        prompt: "metanet hybrid geometry: spiderweb radial tension + rope weave lattice + crystalline node joints, highly ordered repetition, diagram clarity"
+      },
+    ];
+
+    const ALL_TAGS = Array.from(new Set(COMPONENTS.flatMap(c => c.tags))).sort();
+
+    let selected = [];
+    let activeTags = new Set();
+    let compactMode = false;
+
+    const $ = (sel) => document.querySelector(sel);
+    const el = (tag, attrs={}, html="") => {
+      const n = document.createElement(tag);
+      for (const [k,v] of Object.entries(attrs)){
+        if (k === "class") n.className = v;
+        else if (k.startsWith("on") && typeof v === "function") n.addEventListener(k.slice(2), v);
+        else if (k === "ariaPressed") n.setAttribute("aria-pressed", String(v));
+        else n.setAttribute(k, v);
+      }
+      if (html) n.innerHTML = html;
+      return n;
+    };
+
+    function iconSVG(key){
+      const fn = ICONS[key] || ICONS.lattice;
+      return fn();
+    }
+
+    function toast(msg){
+      const t = $("#toast");
+      t.textContent = msg;
+      t.classList.add("show");
+      setTimeout(() => t.classList.remove("show"), 1100);
+    }
+
+    function buildQueryFromSelected(format="lines"){
+      const items = selected.map(id => COMPONENTS.find(c => c.id === id)).filter(Boolean);
+      if (!items.length) return "";
+
+      const base = "clean geometric systems design, high clarity, symmetrical composition, precise linework";
+      const prompts = items.map(c => c.prompt);
+
+      if (format === "commas"){
+        return `${base}, ${prompts.join(", ")}`;
+      }
+      if (format === "bullets"){
+        return `${base}\n- ` + prompts.join("\n- ");
+      }
+      return `${base}\n` + prompts.join("\n");
+    }
+
+    function syncTextarea(format="lines"){
+      $("#queryText").value = buildQueryFromSelected(format);
+    }
+
+    function exportJSON(){
+      const items = selected.map(id => COMPONENTS.find(c => c.id === id)).filter(Boolean);
+      const payload = {
+        version: 1,
+        createdAt: new Date().toISOString(),
+        selected: items.map(i => ({
+          id: i.id,
+          name: i.name,
+          tags: i.tags,
+          prompt: i.prompt
+        })),
+        query: $("#queryText").value
+      };
+      return JSON.stringify(payload, null, 2);
+    }
+
+    function filteredComponents(){
+      const q = $("#search").value.trim().toLowerCase();
+      return COMPONENTS.filter(c => {
+        const matchesText = !q || (
+          c.name.toLowerCase().includes(q) ||
+          c.snippet.toLowerCase().includes(q) ||
+          c.tags.some(t => t.toLowerCase().includes(q))
+        );
+        const matchesTags = activeTags.size === 0 || c.tags.some(t => activeTags.has(t));
+        return matchesText && matchesTags;
+      });
+    }
+
+    function renderFilters(){
+      const wrap = $("#filters");
+      wrap.innerHTML = "";
+      ALL_TAGS.forEach(tag => {
+        const b = el("button", {
+          class: "chip",
+          type: "button",
+          ariaPressed: activeTags.has(tag),
+          onclick: () => {
+            if (activeTags.has(tag)) activeTags.delete(tag);
+            else activeTags.add(tag);
+            renderFilters();
+            renderCards();
+          }
+        }, `<span>#${tag}</span>`);
+        wrap.appendChild(b);
+      });
+    }
+
+    function renderCards(){
+      const cards = $("#cards");
+      cards.innerHTML = "";
+      const list = filteredComponents();
+
+      if (!list.length){
+        cards.appendChild(el("div",{class:"card"}, `
+          <div class="meta">
+            <p class="name">No matches</p>
+            <p class="desc">Try clearing filters or searching for a broader term (e.g. “fractal”, “grid”, “flow”).</p>
+          </div>
+        `));
+        return;
+      }
+
+      list.forEach(c => {
+        const already = selected.includes(c.id);
+        const card = el("div",{class:"card"});
+        const thumb = el("div",{class:"thumb"}, iconSVG(c.icon));
+        const meta = el("div",{class:"meta"});
+        meta.appendChild(el("p",{class:"name"}, c.name));
+        if (!compactMode){
+          meta.appendChild(el("p",{class:"desc"}, c.snippet));
+        }
+        const row = el("div",{class:"row"});
+        if (!compactMode){
+          c.tags.slice(0,3).forEach(t => row.appendChild(el("span",{class:"tag"}, `#${t}`)));
+        }
+        const addBtn = el("button",{
+          class: `small ${already ? "btnGhost" : "btnAdd"}`,
+          type:"button",
+          onclick: () => {
+            if (!selected.includes(c.id)){
+              selected.push(c.id);
+              renderSelected();
+              syncTextarea();
+              toast(`Added: ${c.name}`);
+              renderCards();
+            } else {
+              toast("Already added");
+            }
+          }
+        }, already ? "Added" : "Add to query");
+
+        row.appendChild(addBtn);
+
+        const insertBtn = el("button",{
+          class:"small btnGhost",
+          type:"button",
+          onclick: () => {
+            const t = $("#queryText");
+            const insert = (t.value.trim().length ? "\n" : "") + c.prompt;
+            t.value = (t.value + insert).trimStart();
+            toast("Inserted prompt line");
+          }
+        }, "Insert line");
+
+        row.appendChild(insertBtn);
+
+        meta.appendChild(row);
+
+        card.appendChild(thumb);
+        card.appendChild(meta);
+        cards.appendChild(card);
+      });
+    }
+
+    function renderSelected(){
+      const wrap = $("#selectedList");
+      wrap.innerHTML = "";
+
+      $("#selectedEmpty").style.display = selected.length ? "none" : "block";
+
+      selected.forEach((id, idx) => {
+        const c = COMPONENTS.find(x => x.id === id);
+        if (!c) return;
+
+        const item = el("div",{class:"selectedItem"});
+        const mini = el("div",{class:"mini"}, iconSVG(c.icon));
+        const txt = el("div",{class:"txt"});
+        txt.appendChild(el("div",{class:"t"}, c.name));
+        txt.appendChild(el("div",{class:"s"}, c.prompt));
+
+        const btns = el("div",{class:"btns"});
+
+        const up = el("button",{
+          class:"small btnGhost",
+          type:"button",
+          onclick: () => {
+            if (idx === 0) return;
+            const tmp = selected[idx-1];
+            selected[idx-1] = selected[idx];
+            selected[idx] = tmp;
+            renderSelected();
+            syncTextarea();
+          },
+          title:"Move up"
+        },"↑");
+
+        const down = el("button",{
+          class:"small btnGhost",
+          type:"button",
+          onclick: () => {
+            if (idx === selected.length-1) return;
+            const tmp = selected[idx+1];
+            selected[idx+1] = selected[idx];
+            selected[idx] = tmp;
+            renderSelected();
+            syncTextarea();
+          },
+          title:"Move down"
+        },"↓");
+
+        const remove = el("button",{
+          class:"small btnDanger",
+          type:"button",
+          onclick: () => {
+            selected = selected.filter(x => x !== id);
+            renderSelected();
+            syncTextarea();
+            renderCards();
+            toast(`Removed: ${c.name}`);
+          },
+          title:"Remove"
+        },"✕");
+
+        btns.appendChild(up);
+        btns.appendChild(down);
+        btns.appendChild(remove);
+
+        item.appendChild(mini);
+        item.appendChild(txt);
+        item.appendChild(btns);
+        wrap.appendChild(item);
+      });
+    }
+
+    $("#search").addEventListener("input", renderCards);
+
+    $("#btnResetFilters").addEventListener("click", () => {
+      activeTags.clear();
+      $("#search").value = "";
+      renderFilters();
+      renderCards();
+      toast("Filters reset");
+    });
+
+    $("#btnCopy").addEventListener("click", async () => {
+      try{
+        await navigator.clipboard.writeText($("#queryText").value);
+        toast("Copied to clipboard");
+      }catch{
+        $("#queryText").select();
+        document.execCommand("copy");
+        toast("Copied (fallback)");
+      }
+    });
+
+    $("#btnClear").addEventListener("click", () => {
+      selected = [];
+      $("#queryText").value = "";
+      renderSelected();
+      renderCards();
+      toast("Cleared");
+    });
+
+    $("#btnAutoBuild").addEventListener("click", () => {
+      syncTextarea();
+      toast("Rebuilt from selected");
+    });
+
+    $("#btnInsertCommas").addEventListener("click", () => {
+      $("#queryText").value = buildQueryFromSelected("commas");
+      toast("Comma-separated");
+    });
+
+    $("#btnInsertBullets").addEventListener("click", () => {
+      $("#queryText").value = buildQueryFromSelected("bullets");
+      toast("Bulleted");
+    });
+
+    $("#btnCompact").addEventListener("click", () => {
+      compactMode = !compactMode;
+      renderCards();
+      toast(compactMode ? "Compact on" : "Compact off");
+    });
+
+    $("#btnAddRandom").addEventListener("click", () => {
+      const remaining = COMPONENTS.filter(c => !selected.includes(c.id));
+      if (!remaining.length){ toast("All components already added"); return; }
+      const pick = remaining[Math.floor(Math.random()*remaining.length)];
+      selected.push(pick.id);
+      renderSelected();
+      syncTextarea();
+      renderCards();
+      toast(`Added: ${pick.name}`);
+    });
+
+    $("#btnExportJSON").addEventListener("click", async () => {
+      const json = exportJSON();
+      try{
+        await navigator.clipboard.writeText(json);
+        toast("Export JSON copied");
+      }catch{
+        $("#queryText").value = json;
+        toast("Clipboard blocked — JSON shown");
+      }
+    });
+
+    renderFilters();
+    renderCards();
+    renderSelected();
+    syncTextarea();
+  </script>
+</body>
+</html>
